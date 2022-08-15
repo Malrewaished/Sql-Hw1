@@ -1,0 +1,57 @@
+create database store;
+
+create table countries(
+    code int primary key ,
+    name varchar(20) unique ,
+    continent_name varchar(20) not null
+);
+
+
+create table users
+(
+    id int primary key ,
+    country_code        int,
+    full_name varchar(20),
+    email     varchar(20) unique,
+    gender    char(1) check (gender = 'm' | gender = 'f'),
+    date_of_birth varchar(15),
+    created_at datetime,
+    foreign key (country_code) references countries(code)
+);
+
+create table orders
+(
+    id int primary key ,
+    user_id int,
+    status varchar(6) check (status = 'start' or status = 'finish'),
+    created_at datetime,
+    foreign key (user_id) references users(id)
+);
+
+    create table products
+    (
+        id int primary key ,
+        name varchar(10) not null ,
+        price int default 0,
+        status varchar(10) check (status = 'start' or status = 'finish'),
+        created_at datetime
+
+
+    );
+
+create table order_products
+(
+    order_id int ,
+    product_id int ,
+    quantity int default 0,
+    primary key (order_id , product_id)
+);
+
+INSERT INTO store.countries (code, name, continent_name) VALUES (100, 'Riyadh', 'Asia')
+INSERT INTO store.order_products (order_id, product_id, quantity) VALUES (444, 777, 3)
+INSERT INTO store.orders (id, user_id, status, created_at) VALUES (444, 1234, 'start', null)
+INSERT INTO store.users (id, country_code, full_name, email, gender, date_of_birth, created_at) VALUES (1234, 100, 'Meshal', 'g.9@hotmail.com\\', 'm', '1989-10-13', null)
+INSERT INTO store.products (id, name, price, status, created_at) VALUES (777, 'chocolate', 200, 'finish', null)
+
+DELETE FROM store.products WHERE id = 777
+UPDATE store.countries t SET t.name = 'Dammam' WHERE t.code = 100
